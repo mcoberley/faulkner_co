@@ -1,0 +1,36 @@
+# Define your item pipelines here
+#
+# Don't forget to add your pipeline to the ITEM_PIPELINES setting
+# See: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
+
+
+# useful for handling different item types with a single interface
+from itemadapter import ItemAdapter
+from faulkner_co.spiders.warrants2 import Warrants2Spider
+from faulkner_co.spiders.child_support_offender import ChildSupportOffenderSpider
+from faulkner_co.spiders.current_inmates import CurrentInmatesSpider
+import json
+
+
+class FaulknerCoPipeline:
+    items = []
+
+    def open_spider(self, spider):
+        # since this pipeline is run for all items, we check here to see what type of 
+        # spider is being passed in and name the output file accordingly
+        if isinstance(spider, Warrants2Spider):
+            self.file = open('warrants.json', 'w')
+        elif isinstance(spider, ChildSupportOffenderSpider):
+            self.file = open('child_support_offenders.json', 'w')
+        elif isinstance(spider, CurrentInmatesSpider):
+            self.file = open('inmates.json', 'w')
+        else:
+            self.file = open('items.json', 'w')
+
+    def close_spider(self, spider):
+        self.file.write(json.dumps(self.items))
+        self.file.close()
+
+    def process_item(self, item, spider):
+        self.items.append(ItemAdapter(item).asdict())
+        return item
