@@ -10,6 +10,7 @@ from faulkner_co.spiders.warrants2 import Warrants2Spider
 from faulkner_co.spiders.child_support_offender import ChildSupportOffenderSpider
 from faulkner_co.spiders.current_inmates import CurrentInmatesSpider
 from faulkner_co.spiders.sex_offenders import SexOffendersSpider
+from faulkner_co.spiders.press_release import PressReleaseSpider
 import json
 
 
@@ -27,6 +28,8 @@ class FaulknerCoPipeline:
             self.file = open('inmates.json', 'w')
         elif isinstance(spider, SexOffendersSpider):
             self.file = open('sex_offenders.json', 'w')
+        elif isinstance(spider, PressReleaseSpider):
+            self.file = open('press_releases.json', 'w')
         else:
             self.file = open('items.json', 'w')
 
