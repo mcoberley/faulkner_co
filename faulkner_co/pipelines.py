@@ -9,6 +9,7 @@ from itemadapter import ItemAdapter
 from faulkner_co.spiders.warrants2 import Warrants2Spider
 from faulkner_co.spiders.child_support_offender import ChildSupportOffenderSpider
 from faulkner_co.spiders.current_inmates import CurrentInmatesSpider
+from faulkner_co.spiders.sex_offenders import SexOffendersSpider
 import json
 
 
@@ -24,6 +25,8 @@ class FaulknerCoPipeline:
             self.file = open('child_support_offenders.json', 'w')
         elif isinstance(spider, CurrentInmatesSpider):
             self.file = open('inmates.json', 'w')
+        elif isinstance(spider, SexOffendersSpider):
+            self.file = open('sex_offenders.json', 'w')
         else:
             self.file = open('items.json', 'w')
 
