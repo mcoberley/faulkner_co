@@ -20,6 +20,7 @@ class FaulknerCoPipeline:
     def open_spider(self, spider):
         # since this pipeline is run for all items, we check here to see what type of 
         # spider is being passed in and name the output file accordingly
+
         if isinstance(spider, Warrants2Spider):
             self.file = open('warrants.json', 'w')
         elif isinstance(spider, ChildSupportOffenderSpider):

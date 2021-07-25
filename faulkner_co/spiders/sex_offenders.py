@@ -4,7 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
-from faulkner_co.items import SexOffenderItem
+
 class SexOffendersSpider(scrapy.Spider):
     name = 'sex_offenders'
     allowed_domains = ['fcso.ar.gov']
@@ -27,9 +27,10 @@ class SexOffendersSpider(scrapy.Spider):
                 request = scrapy.Request(url=view.get_attribute('href'), callback=self.parse)
                 list.append(request)
             except:
-                self.logger.error("Failed")
+                self.logger.error("Failed: " + name)
 
         driver.quit()
+
         return list
 
     def parse(self, response):
