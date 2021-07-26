@@ -1,25 +1,26 @@
 # faulkner_co
-A web scraper for the Faulkner County, Arkansas police department.
+A web scraper for the [Faulkner County, Arkansas police department](https://www.fcso.ar.gov/).
 
 ## Spiders
 ---
 ### child_support_offender
-Scrapes items from Faulkner County's [list](https://www.fcso.ar.gov/child-support-offenders) of child-support offenders. The spider 
-extends scrapy.CrawlSpider. Each entry on the website also includes a picture of the offender. However, it's not included here. I wasn't
-incorporating Selenium when I wrote this one, and haven't had time to go back to it and update.
+Scrapes items from Faulkner County's [list](https://www.fcso.ar.gov/child-support-offenders) of child-support offenders. Each entry on the website also includes a picture of the offender a link to which is not included in these results. It could be included in future iterations, but will require Selenium to retrieve.\
+Class: [ChildSupportOffenderSpider](faulkner_co/spiders/child_support_offender.py)
 
 ### current_inmates
-Scrapes items from Faulker County's current-inmate [roster](https://www.fcso.ar.gov/roster.php).
+Scrapes items from Faulker County's current-inmate [roster](https://www.fcso.ar.gov/roster.php).\
+Class: [CurrentInmatesSpider](faulkner_co/spiders/current_inmates.py)
 
 ### press_release
-Scrapes text and image links from Faulker County's press-releases listed [here](https://www.fcso.ar.gov/press)
+Scrapes text and image links from Faulker County's press-releases listed [here](https://www.fcso.ar.gov/press).\
+Class: [PressReleaseSpider](faulkner_co/spiders/press_release.py)
 
 ### sex_offenders
-Scrapes items from Faulkner County's [list](https://www.fcso.ar.gov/sex_offenders.php) of registered sex-offenders.
+Scrapes items from Faulkner County's [list](https://www.fcso.ar.gov/sex_offenders.php) of registered sex-offenders.\
 Class: [SexOffendersSpider](faulkner_co/spiders/sex_offenders.py).
 
 ### warrants2
-Scrapes [current and past](https://www.fcso.ar.gov/warrants.php) warrant information. 
+Scrapes [current and past](https://www.fcso.ar.gov/warrants.php) warrant information.\
 Class: [Warrants2Spider](faulkner_co/spiders/warrants2.py)
 
 ## Items
@@ -87,12 +88,20 @@ class SexOffenderItem(scrapy.Item):
 ### FaulknerCoPipeline
 There is a single item pipeline called [FaulknerCoPipeline](faulkner_co/pipelines.py). 
 It initializes an array when a given spider is opened. Each item is appended to that array as they are passed down by the spider. 
-When the spider closes, the array is dumped to a JSON file which is named based on the type of spider passing it through the pipeline. 
+When the spider closes, the array is dumped to a JSON file which is named based on the _type_ of spider passing it through the pipeline. 
+*   ChildSupportOffenderSpider  ==> sex_offenders.json
+*   CurrentInmatesSpider        ==> inmates.json
+*   SexOffendersSpider          ==> sex_offenders.json
+*   Warrants2Spider             ==> warrants.json
+*   PressReleaseSpider          ==> press_releases.json
+
+JSON was chosen based purely on the author's personal preference and this pipeline can easily be updated to dump the items to a CSV file 
+or a database instance (I reccomend MongoDB ;D)
 
 ## Setup and Run
 ---
 ### Selenium/chromedriver
-The chromedriver program must be somewhere in the PATH of the profile executing the spider (or the system PATH I suppose).
+The SexOffendersSpider uses selenium to retrieve a list of links through interactions with a Javascript interface on the page. Consequently, the chromedriver executable is required. It must be somewhere in the PATH of the profile executing the spider (or the system PATH). It may be downloaded [here](https://chromedriver.chromium.org/downloads).
 ### Executing spider crawl
 From any directory within the scrapy project you may run:
 ```bash
