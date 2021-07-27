@@ -88,7 +88,7 @@ class SexOffenderItem(scrapy.Item):
 ### FaulknerCoPipeline
 There is a single item pipeline called [FaulknerCoPipeline](faulkner_co/pipelines.py). 
 It initializes an array when a given spider is opened. Each item is appended to that array as they are passed down by the spider. 
-When the spider closes, the array is dumped to a JSON file which is named based on the _type_ of spider passing it through the pipeline. 
+When the spider closes, the array is dumped to a JSON file which is named based on the _type_ of spider passing it through the pipeline (also at this step the import [etl.py](faulkner_co/etl.py)) 
 *   ChildSupportOffenderSpider  ==> sex_offenders.json
 *   CurrentInmatesSpider        ==> inmates.json
 *   SexOffendersSpider          ==> sex_offenders.json
@@ -111,21 +111,80 @@ Each spider's output is placed in the root directory of the project (I don't kno
 
 ## Data Files
 ---
-### warrants.json
-Data dumped by the [warrants2](#warrants2) spider.
+### [warrants.json](faulkner_co/warrants.json)
+Data scraped by the [warrants2](#warrants2) spider.\
+Format:
+```json
+{
+    "name": "string",
+    "age": "string",
+    "date": "string",
+    "charges": "string"
+}
+```
 
-### child_support_offenders.json
-Data dumped by the [child_support_offender](#child_support_offender) spider.
+### [child_support_offenders.json](faulkner_co/child_support_offenders.json)
+Data scraped by the [child_support_offender](#child_support_offender) spider.\
+Format:
+```json
+{
+    "name": "string",
+    "age": "string",
+    "date": "string",
+    "bond": "string",
+    "charges": "string"
+}
+```
 
-### inmates.json
-Data dumped by the [current_inmates](#current_inmates) spider.
+### [inmates.json](faulkner_co/inmates.json)
+Data scraped by the [current_inmates](#current_inmates) spider.\
+Format:
+```json
+{
+    "name": "string",
+    "age": "string",
+    "gender": "string",
+    "race": "string",
+    "charges": "string",
+    "booking_number": "string",
+    "arresting_agency": "string",
+    "booking_date": "string",
+    "release_date": "string"
+}
+```
 
-### sex_offenders.json
-Data dumped by the [sex_offenders](#sex_offenders) spider.
+### [sex_offenders.json](faulkner_co/sex_offenders.json)
+Data scraped by the [sex_offenders](#sex_offenders) spider.\
+Format:
+```json
+{
+    "name": "string",
+    "address": "string",
+    "dob": "string",
+    "gender": "string",
+    "hair": "string",
+    "eyes": "string",
+    "height": "string",
+    "weight": "string",
+    "race": "string",
+    "scars_marks_tattoos": "string",
+    "additional_info": "string",
+    "offender_level": "string",
+    "offense": "string"
+}
+```
 
-### press_releases.json
-Data dumped by the [press_release](#press_release) spider.
+### [press_releases.json](faulkner_co/press_releases.json)
+Data scraped by the [press_release](#press_release) spider.\
+Format:
+```json
+{
+    "title": "string",
+    "image_link": "string",
+    "text": "string"
+}
+```
 
 ### items.json
 Any items that may find their way through the pipeline that doesn't belong to one of the above mentioned spiders is put
-into a generic items.json file. This should never happen except maybe during development.
+into a generic items.json file. This should never happen (except maybe during development).
